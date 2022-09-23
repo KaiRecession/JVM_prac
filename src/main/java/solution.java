@@ -1,24 +1,46 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class solution {
-    int result = 0;
+class Solution {
+    static int max = 0;
     public static void main(String[] args) {
-        solution solution = new solution();
-        solution.find(4, 0);
-        System.out.println(solution.result);
-
+        int[] position = {2, 3, 4, 5};
+        int[] radius = {1, 1, 1, 2};
+        int[] values = {50, 10, 40, 70};
+        maxvalue(new LinkedList<Integer>(), position, radius, values, 0, 0);
+        System.out.println(max);
     }
 
-    public void find(int n, int path) {
-        if (path == n) {
-            result++;
-            return;
+    public static void maxvalue(List<Integer> plant,int[] position, int[] radius, int[] value, int memo, int index) {
+        for (int i = index; i < position.length; i++) {
+            boolean contains = false;
+            if (plant.contains(position[i]))
+                contains = true;
+            for (int j = 1; j <= radius[i]; j++) {
+                if (plant.contains(position[i] + j))
+                    contains = true;
+                if (plant.contains(position[i] - j))
+                    contains = true;
+
+            }
+            if (contains)
+                continue;
+
+//            maxvalue(plant, position, radius, value, memo, i + 1);
+
+            plant.add(position[i]);
+
+            memo += value[i];
+
+            maxvalue(plant, position, radius, value, memo, i + 1);
+
+            max = Math.max(max, memo);
+            plant.remove((Integer)(position[i]));
+            memo -= value[i];
         }
-        find (n, path + 1);
-        if (path + 2 <= n)
-            find (n, path + 2);
-        LinkedList<Integer> integers = new LinkedList<>();
     }
+
 
 }
